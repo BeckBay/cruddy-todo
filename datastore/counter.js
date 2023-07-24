@@ -37,10 +37,34 @@ const writeCounter = (count, callback) => {
 };
 
 // Public API - Fix this function //////////////////////////////////////////////
+// Do this by rewriting getNextUniqueId to make use of the provided readCounter and writeCounter functions.
+exports.getNextUniqueId = (callback) => {
+  // counter = counter + 1;
+  // return zeroPaddedNumber(counter);
+  // readCounter, get the currentCounter
+  readCounter((err, currentCounter) => {
+    if (err) {
+      throw ('Error reading counter');
+      callback(null, 0);
+    } else {
+      // increment the counter
+      counter = currentCounter + 1;
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+      // call the writeCounter update the counter
+      writeCounter(counter, (err, counterString) => {
+        if (err) {
+          throw ('error writing counter');
+        } else {
+          callback(null, zeroPaddedNumber(counter));
+
+        }
+      });
+    }
+  });
+
+
+
+
 };
 
 
